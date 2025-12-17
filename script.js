@@ -71,3 +71,33 @@ nextButton.onclick = loadQuestion;
 
 // Start the quiz by loading the first question
 loadQuestion();
+let timeLeft = 30;  // 30 seconds per question
+let timerInterval;
+
+function startTimer() {
+  timeLeft = 30;  // Reset the timer for each new question
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    document.getElementById("timer").textContent = `Time Left: ${timeLeft}s`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      alert("Time's up! Moving to the next question.");
+      nextQuestion();
+    }
+  }, 1000);
+}
+
+function loadQuestion() {
+  const currentQuestion = questions[currentQuestionIndex];
+  questionElement.textContent = currentQuestion.question;
+  optionsContainer.innerHTML = "";
+  currentQuestion.options.forEach(option => {
+    const button = document.createElement("button");
+    button.textContent = option;
+    button.onclick = () => checkAnswer(option);
+    optionsContainer.appendChild(button);
+  });
+  startTimer();  // Start the timer when the question is loaded
+}
+
